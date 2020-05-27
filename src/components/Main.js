@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -46,8 +46,12 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Main() {
+export default function Main({handleClick: handleSubmit}) {
     const classes = useStyles();
+
+    const [accountId, setAccountId] = useState("");
+    const [password, setPassword] = useState("");
+
 
     return (
         <Container component="main" maxWidth="xs">
@@ -59,7 +63,7 @@ export default function Main() {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate>
+                <form className={classes.form} noValidate onSubmit={(event) => {event.preventDefault(); handleSubmit(accountId, password)}}>
                     <TextField
                         variant="outlined"
                         margin="normal"
@@ -70,6 +74,8 @@ export default function Main() {
                         name="email"
                         autoComplete="email"
                         autoFocus
+                        value={accountId}
+                        onChange={event => setAccountId(event.target.value)}
                     />
                     <TextField
                         variant="outlined"
@@ -81,6 +87,8 @@ export default function Main() {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        value={password}
+                        onChange={event => setPassword(event.target.value)}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
