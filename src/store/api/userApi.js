@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { DOMAIN } from '../../static/constracts';
+import { DOMAIN } from '../../static/constant';
 
 
 export async function loginApi(accountId, password) {
