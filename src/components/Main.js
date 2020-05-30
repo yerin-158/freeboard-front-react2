@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Main({handleClick: handleSubmit}) {
+export default function Main({handleClick, message}) {
     const classes = useStyles();
 
     const [accountId, setAccountId] = useState("");
@@ -61,7 +61,10 @@ export default function Main({handleClick: handleSubmit}) {
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
-                <form className={classes.form} noValidate onSubmit={(event) => {event.preventDefault(); handleSubmit(accountId, password)}}>
+                <Typography variant="subtitle1" gutterBottom>
+                    {message}
+                </Typography>
+                <form className={classes.form} noValidate onSubmit={(event) => {event.preventDefault(); handleClick(accountId, password)}}>
                     <TextField
                         variant="outlined"
                         margin="normal"
