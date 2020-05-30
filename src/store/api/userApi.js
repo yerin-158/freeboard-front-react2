@@ -1,12 +1,10 @@
 import axios from 'axios';
+import { DOMAIN } from '../../static/constracts';
 
 
 export async function login(accountId, password) {
-    const prev = '/freeboard02';
-    debugger;
-
     try {
-        const response = await  axios.post(prev+'/api/users?type=LOGIN',
+        const response = await axios.post(DOMAIN+'/api/users?type=LOGIN',
             {accountId: accountId, password: password});
         return response;
     } catch (error) {
