@@ -21,7 +21,6 @@ const MainContainer = ({accountId, isLogged, isLoginPage,  errorMessage, loginSu
     const joinSubmit = async (id, password) => {
         var response = await joinApi(id, password);
         if (typeof response.data.code != "undefined"){
-            debugger;
             joinFail(response.data.message);
         } else {
             alert("회원 가입에 성공하셨습니다. 로그인 페이지로 이동합니다.");
