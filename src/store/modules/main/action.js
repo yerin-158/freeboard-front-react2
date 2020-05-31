@@ -9,3 +9,11 @@ export const loginFail = createAction(
     type.LOGIN_FAIL, errorMessage => errorMessage
 )
 
+export const pageChange = createAction(
+    type.PAGE_CHANGE
+)
+
+export const joinFail = createAction(
+    type.JOIN_FAIL, errorMessage => errorMessage
+)
+
