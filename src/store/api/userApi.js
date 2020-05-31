@@ -4,11 +4,26 @@ import { DOMAIN } from '../../static/constant';
 
 export async function loginApi(accountId, password) {
     try {
-        const response = await axios.post(DOMAIN+'/api/users?type=LOGIN',
-            {accountId: accountId, password: password});
-        return response;
+        return await axios.post(DOMAIN+'/api/users?type=LOGIN',
+                {accountId: accountId, password: password});
     } catch (error) {
-
+        const response = { data : {
+                code : error.response.status,
+                message: error.message
+            }};
+        return response;
     }
+}
 
+export async function joinApi(accountId, password) {
+    try {
+        return await axios.post(DOMAIN+'/api/users',
+                {accountId: accountId, password: password});
+    } catch (error) {
+        const response = { data : {
+                code : error.response.status,
+                message: error.message
+            }};
+        return response;
+    }
 }
