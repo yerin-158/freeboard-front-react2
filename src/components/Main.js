@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -7,6 +7,7 @@ import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import Typography from '@material-ui/core/Typography';
 import {makeStyles} from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
@@ -44,22 +45,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Main({handleClick, message}) {
+export default function Main({handleClick, message, isLoginPage, pageChange}) {
     const classes = useStyles();
 
     const [accountId, setAccountId] = useState("");
     const [password, setPassword] = useState("");
 
+    useEffect(() => {
+        setAccountId("");
+        setPassword("");
+    }, [isLoginPage])
 
     return (
         <Container component="main" maxWidth="xs">
             <CssBaseline />
             <div className={classes.paper}>
                 <Avatar className={classes.avatar}>
-                    <LockOutlinedIcon />
+                    {isLoginPage? <LockOutlinedIcon /> : <VpnKeyIcon />}
                 </Avatar>
                 <Typography component="h1" variant="h5">
-                    Sign in
+                    {isLoginPage ? "Sign in" : "Sign up"}
                 </Typography>
                 <Typography variant="subtitle1" gutterBottom>
                     {message}
@@ -98,7 +103,7 @@ export default function Main({handleClick, message}) {
                         color="primary"
                         className={classes.submit}
                     >
-                        Sign In
+                        {isLoginPage ? "Sign In" : "Sing Up"}
                     </Button>
                     <Grid container>
                         <Grid item xs>
@@ -107,8 +112,8 @@ export default function Main({handleClick, message}) {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="/join" variant="body2">
-                                {"Don't have an account? Sign Up"}
+                            <Link href="#" variant="body2" onClick={() => pageChange()}>
+                                {isLoginPage ? "Don't have an account? Sign Up" : "Already have an account? Sign In"}
                             </Link>
                         </Grid>
                     </Grid>
