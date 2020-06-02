@@ -15,6 +15,9 @@ const MainContainer = ({accountId, isLogged, isLoginPage,  errorMessage, loginSu
             loginFail(response.data.message);
         } else {
             loginSuccess(id);
+            alert("로그인에 성공하셨습니다. 게시판으로 이동합니다.");
+            // eslint-disable-next-line no-restricted-globals
+            location.href = "/board";
         }
     }
 
