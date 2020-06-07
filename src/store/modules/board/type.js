@@ -1,4 +1,3 @@
 export default {
     CHANGE_PAGE: 'BOARD/CHANGE_PAGE',
-    CHANGE_PAGE_SIZE: 'BOARD/CHANGE_PAGE_SIZE'
 }

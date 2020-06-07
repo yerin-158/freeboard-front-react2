@@ -1,16 +1,21 @@
-import {createAction} from "redux-actions";
 import type from './type'
+import {get} from "../../api/boardApi";
+import {getData} from "../../../helper/boardHelper";
 
-export const changePage = createAction(
-    type.CHANGE_PAGE,
-    (pageNumber, selectedData) => ({
-        pageNumber, selectedData
-    })
-)
+export const changePage = (pageNumber, pageSize) => dispatch => {
 
-export const changePageSize = createAction(
-    type.CHANGE_PAGE_SIZE,
-    (pageSize, selectedData) => ({
-        pageSize, selectedData
-    })
-)
+    return get(pageNumber+1, pageSize)
+        .then(response => {
+            const selectedData = getData(pageNumber, pageSize, response);
+            dispatch({
+                type: type.CHANGE_PAGE,
+                payload: {
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    selectedData: selectedData
+                }
+            })
+        }).catch(error => {
+            /* error control */
+        })
+}
