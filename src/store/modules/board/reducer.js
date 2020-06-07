@@ -21,12 +21,8 @@ export default handleActions({
         [type.CHANGE_PAGE]: (state, action) => ({
             ...state,
             pageNumber: action.payload.pageNumber,
-            selectedData: action.payload.selectedData
-        }),
-        [type.CHANGE_PAGE_SIZE]: (state, action) => ({
-            ...state,
             pageSize: action.payload.pageSize,
             selectedData: action.payload.selectedData
-        })
+        }),
     }, initialState
 )

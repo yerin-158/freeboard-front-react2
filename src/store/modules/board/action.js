@@ -1,21 +1,5 @@
-import {createAction} from "redux-actions";
 import type from './type'
 import {get} from "../../api/boardApi";
-
-export const changePageNumber = createAction(
-    type.CHANGE_PAGE,
-    (pageNumber, selectedData) => ({
-        pageNumber, selectedData
-    })
-)
-
-export const changePageSize = createAction(
-    type.CHANGE_PAGE_SIZE,
-    (pageSize, selectedData) => ({
-        pageSize, selectedData
-    })
-)
-
 
 export const changePage = (pageNumber, pageSize) => dispatch => {
     var testData = [{name: 'Mehmet', surname: '안녕하세요 ^^ 5-1', birthYear: 1987, birthCity: 63},
@@ -27,13 +11,15 @@ export const changePage = (pageNumber, pageSize) => dispatch => {
     return get(pageNumber, pageSize)
         .then(response => {
             const selectedData = testData.concat(response.data.contents).concat(testData);
-            dispatch(changePageNumber(pageNumber, selectedData));
+            dispatch({
+                type: type.CHANGE_PAGE,
+                payload: {
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    selectedData: selectedData
+                }
+            })
         }).catch(error => {
-            console.log(error);
-            const response = { data : {
-                    code : error.response.status,
-                    message: error.message
-                }};
-            return response;
+            /* error control */
         })
 }

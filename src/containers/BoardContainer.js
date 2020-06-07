@@ -114,17 +114,12 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, changePage}) => {
         changePage(pageNumber, pageSize);
     };
 
-    const handleChangeRowPerPage = (pageSize) => {
-        changePage(pageNumber, pageSize);
-    }
-
     return (
         <Board
             pageNumber={pageNumber}
             pageSize={pageSize}
             selectedData={selectedData}
             handleChangePage={handleChangePage}
-            handleChangeRowPerPage={handleChangeRowPerPage}
             columns={columns}
             data={selectedData}
         />
