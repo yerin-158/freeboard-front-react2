@@ -1,9 +1,9 @@
 import React, {useEffect} from "react";
 import {connect} from 'react-redux';
-import {changePage, changePageSize} from "../store/modules/board/action";
+import {changePage} from "../store/modules/board/action";
 import Board from "../components/Board";
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, changePage, changePageSize}) => {
+const BoardContainer = ({pageNumber, pageSize, selectedData, changePage}) => {
 
     const columns = [
         {title: '작성자', field: 'name'},
@@ -111,11 +111,11 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, changePage, changeP
     }
 
     const handleChangePage = (pageNumber) => {
-        changePage(pageNumber, handleData.get(pageNumber, pageSize));
+        changePage(pageNumber, pageSize);
     };
 
     const handleChangeRowPerPage = (pageSize) => {
-        changePageSize(pageSize, handleData.get(pageNumber, pageSize));
+        changePage(pageNumber, pageSize);
     }
 
     return (
@@ -138,8 +138,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    changePage : (pageNumber, selectedData) => dispatch(changePage(pageNumber, selectedData)),
-    changePageSize : (pageSize, selectedData) => dispatch(changePageSize(pageSize, selectedData)),
+    changePage : (pageNumber, pageSize) => dispatch(changePage(pageNumber, pageSize)),
 })
 
 export default connect(
