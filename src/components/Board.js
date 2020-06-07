@@ -42,12 +42,12 @@ const tableIcons = {
 };
 
 
-export default function Board({pageNumber, pageSize, selectedData, columns, data, handleChangePage}) {
+export default function Board({pageNumber, pageSize, selectedData, columns, data, handleChangePageNumber, handleChangePageSize}) {
 
     return (
         <MaterialTable
-            onChangePage={handleChangePage}
-            onChangeRowsPerPage={handleChangePage}
+            onChangePage={handleChangePageNumber}
+            onChangeRowsPerPage={handleChangePageSize}
             icons={tableIcons}
             title="게시판"
             columns={columns}
