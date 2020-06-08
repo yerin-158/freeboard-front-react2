@@ -45,6 +45,7 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
             />
             { isModalOpen ?
             <ContentsModal
+                userLoggedIn={accountId}
                 isModalOpen={isModalOpen}
                 modalData={modalData}
                 handleClose={closeModal}

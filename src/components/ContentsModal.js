@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ContentsModal({isModalOpen, modalData, handleClose, handleModify}) {
+export default function ContentsModal({isModalOpen, modalData, userLoggedIn, handleClose, handleModify}) {
     const classes = useStyles();
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
@@ -52,7 +52,9 @@ export default function ContentsModal({isModalOpen, modalData, handleClose, hand
             <hr/>
             <Typography variant="body2" gutterBottom>작성자 : {modalData.writer.accountId}</Typography>
             <Typography variant="body2" gutterBottom>작성일 : {modalData.createdAt}</Typography>
-            <Button color="primary" onClick={() => setIsModify(true)}>Modify</Button>
+            {typeof userLoggedIn != 'undefined' && userLoggedIn == modalData.writer.accountId ?
+                <Button color="primary" onClick={() => setIsModify(true)}>Modify</Button>
+            : null}
             <Button onClick={() => {
                 setIsModify(false);
                 handleClose();
