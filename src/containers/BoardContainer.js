@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from "react";
 import {connect} from 'react-redux';
-import {changePage, clickRow, closeModal} from "../store/modules/board/action";
+import {changePage, clickRow, closeModal, modifyData} from "../store/modules/board/action";
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
 import main from "../store/modules/main/reducer";
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, changePage, clickRow, closeModal}) => {
-
-    const [isRowClick, setIsRowClick] = useState(false);
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, changePage, clickRow, closeModal, modifyData}) => {
 
     useEffect(() => {
         changePage(pageNumber, pageSize);
@@ -27,8 +25,9 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
         changePage(pageNumber, pageSize);
     };
 
-    const handleModify = (title, contents) => {
-        console.log(title, contents);
+    const handleModify = (updatedData) => {
+        modifyData(modalData.id, updatedData, selectedData.slice(0));
+        closeModal();
     }
 
     return (
@@ -68,7 +67,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     changePage : (pageNumber, pageSize) => dispatch(changePage(pageNumber, pageSize)),
     clickRow: (rowData) => dispatch(clickRow(rowData)),
-    closeModal: () => dispatch(closeModal())
+    closeModal: () => dispatch(closeModal()),
+    modifyData: (id, updatedData, allData) => dispatch(modifyData(id, updatedData, allData)),
 })
 
 export default connect(
