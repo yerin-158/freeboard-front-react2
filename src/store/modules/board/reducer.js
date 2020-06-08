@@ -26,6 +26,10 @@ export default handleActions({
             ...state,
             isModalOpen: false,
             modalData: {},
+        }),
+        [type.MODIFY_DATA]: (state, action) => ({
+            ...state,
+            selectedData: action.payload,
         })
     }, initialState
 )
