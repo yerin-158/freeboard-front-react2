@@ -19,3 +19,12 @@ export const changePage = (pageNumber, pageSize) => dispatch => {
             /* error control */
         })
 }
+
+export const clickRow = (rowData) => ({
+    type: type.CLICK_ROW,
+    payload: rowData
+})
+
+export const closeModal = () => ({
+    type: type.CLOSE_MODAL,
+})

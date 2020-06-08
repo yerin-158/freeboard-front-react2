@@ -5,7 +5,9 @@ import {BOARD_PAGE_SIZE} from '../../../static/constant';
 const initialState = {
     pageNumber: 0,
     pageSize: BOARD_PAGE_SIZE,
-    selectedData: []
+    selectedData: [],
+    isModalOpen: false,
+    modalData: {}
 }
 
 export default handleActions({
@@ -15,5 +17,15 @@ export default handleActions({
             pageSize: action.payload.pageSize,
             selectedData: action.payload.selectedData
         }),
+        [type.CLICK_ROW]: (state, action) => ({
+            ...state,
+            isModalOpen: true,
+            modalData: action.payload,
+        }),
+        [type.CLOSE_MODAL]: (state, action) => ({
+            ...state,
+            isModalOpen: false,
+            modalData: {},
+        })
     }, initialState
 )
