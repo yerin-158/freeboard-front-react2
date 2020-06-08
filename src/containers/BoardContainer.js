@@ -1,9 +1,12 @@
-import React, {useEffect} from "react";
+import React, {useEffect, useState} from "react";
 import {connect} from 'react-redux';
-import {changePage} from "../store/modules/board/action";
+import {changePage, clickRow, closeModal, modifyData} from "../store/modules/board/action";
 import Board from "../components/Board";
+import ContentsModal from "../components/ContentsModal";
+import main from "../store/modules/main/reducer";
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, changePage}) => {
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, changePage, clickRow, closeModal, modifyData}) => {
+
     useEffect(() => {
         changePage(pageNumber, pageSize);
     }, [])
@@ -22,27 +25,51 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, changePage}) => {
         changePage(pageNumber, pageSize);
     };
 
+    const handleModify = (updatedData) => {
+        modifyData(modalData.id, updatedData, selectedData.slice(0));
+        closeModal();
+    }
+
     return (
-        <Board
-            pageNumber={pageNumber}
-            pageSize={pageSize}
-            selectedData={selectedData}
-            handleChangePageNumber={handleChangePageNumber}
-            handleChangePageSize={handleChangePageSize}
-            columns={columns}
-            data={selectedData}
-        />
+        <div>
+            <Board
+                pageNumber={pageNumber}
+                pageSize={pageSize}
+                selectedData={selectedData}
+                handleChangePageNumber={handleChangePageNumber}
+                handleChangePageSize={handleChangePageSize}
+                handleRowClick={clickRow}
+                columns={columns}
+                data={selectedData}
+                accountId={accountId}
+            />
+            { isModalOpen ?
+            <ContentsModal
+                userLoggedIn={accountId}
+                isModalOpen={isModalOpen}
+                modalData={modalData}
+                handleClose={closeModal}
+                handleModify={handleModify}
+            />
+            : null}
+        </div>
     );
 }
 
 const mapStateToProps = state => ({
     pageNumber : state.board.pageNumber,
     pageSize : state.board.pageSize,
-    selectedData : state.board.selectedData
+    selectedData : state.board.selectedData,
+    isModalOpen: state.board.isModalOpen,
+    modalData: state.board.modalData,
+    accountId: state.main.accountId
 })
 
 const mapDispatchToProps = dispatch => ({
     changePage : (pageNumber, pageSize) => dispatch(changePage(pageNumber, pageSize)),
+    clickRow: (rowData) => dispatch(clickRow(rowData)),
+    closeModal: () => dispatch(closeModal()),
+    modifyData: (id, updatedData, allData) => dispatch(modifyData(id, updatedData, allData)),
 })
 
 export default connect(

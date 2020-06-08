@@ -1,5 +1,7 @@
 import React, {useEffect} from "react";
 import {connect} from 'react-redux';
+import { useHistory } from "react-router-dom";
+
 
 import Main from "../components/Main";
 
@@ -8,6 +10,7 @@ import {loginSuccess, loginFail, pageChange, joinFail} from "../store/modules/ma
 
 
 const MainContainer = ({accountId, isLogged, isLoginPage,  errorMessage, loginSuccess, loginFail, pageChange, joinFail}) => {
+    let history = useHistory();
 
     const loginSubmit = async (id, password) => {
         var response = await loginApi(id, password);
@@ -16,8 +19,7 @@ const MainContainer = ({accountId, isLogged, isLoginPage,  errorMessage, loginSu
         } else {
             loginSuccess(id);
             alert("로그인에 성공하셨습니다. 게시판으로 이동합니다.");
-            // eslint-disable-next-line no-restricted-globals
-            location.href = "/board";
+            history.push("/board");
         }
     }
 

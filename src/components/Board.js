@@ -20,6 +20,7 @@ import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
+import {clickRow} from "../store/modules/board/action";
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -42,57 +43,23 @@ const tableIcons = {
 };
 
 
-export default function Board({pageNumber, pageSize, selectedData, columns, data, handleChangePageNumber, handleChangePageSize}) {
+export default function Board({pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick}) {
 
     return (
         <MaterialTable
             onChangePage={handleChangePageNumber}
             onChangeRowsPerPage={handleChangePageSize}
             icons={tableIcons}
-            title="게시판"
+            title={"게시판 (login user : "+accountId+")"}
             columns={columns}
             data={selectedData}
             options={{
                 paginationType: "stepped",
                 pageSize: BOARD_PAGE_SIZE
             }}
-            /*editable={{
-                onRowAdd: (newData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.push(newData);
-                                return {...prevState, data};
-                            });
-                        }, 600);
-                    }),
-                onRowUpdate: (newData, oldData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            if (oldData) {
-                                setState((prevState) => {
-                                    const data = [...prevState.data];
-                                    data[data.indexOf(oldData)] = newData;
-                                    return {...prevState, data};
-                                });
-                            }
-                        }, 600);
-                    }),
-                onRowDelete: (oldData) =>
-                    new Promise((resolve) => {
-                        setTimeout(() => {
-                            resolve();
-                            setState((prevState) => {
-                                const data = [...prevState.data];
-                                data.splice(data.indexOf(oldData), 1);
-                                return {...prevState, data};
-                            });
-                        }, 600);
-                    }),
-            }}*/
+            onRowClick={(event, rowData) => {
+                handleRowClick(rowData);
+            }}
         />
     );
 }

@@ -1,5 +1,5 @@
 import type from './type'
-import {get} from "../../api/boardApi";
+import {get, update} from "../../api/boardApi";
 import {getData} from "../../../helper/boardHelper";
 
 export const changePage = (pageNumber, pageSize) => dispatch => {
@@ -14,6 +14,36 @@ export const changePage = (pageNumber, pageSize) => dispatch => {
                     pageSize: pageSize,
                     selectedData: selectedData
                 }
+            })
+        }).catch(error => {
+            /* error control */
+        })
+}
+
+export const clickRow = (rowData) => ({
+    type: type.CLICK_ROW,
+    payload: rowData
+})
+
+export const closeModal = () => ({
+    type: type.CLOSE_MODAL,
+})
+
+export const modifyData = (id, updatedData, allData) => dispatch => {
+    return update(id, updatedData)
+        .then(response => {
+            allData.forEach(function (element) {
+                if(element.id == id){
+                    for (var key in updatedData){
+                        element[key] = updatedData[key];
+                    }
+                    return;
+                }
+            })
+
+            dispatch({
+                type: type.MODIFY_DATA,
+                payload: allData,
             })
         }).catch(error => {
             /* error control */
