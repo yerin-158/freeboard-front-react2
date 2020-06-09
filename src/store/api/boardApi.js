@@ -12,3 +12,7 @@ export function update(id, updatedData) {
 export function deleteOne(id) {
     return axios.delete(DOMAIN+'/api/boards/'+id);
 }
+
+export function post(writeData) {
+    return axios.post(DOMAIN+'/api/boards', writeData);
+}
