@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {changePage, clickRow, closeModal, modifyData} from "../store/modules/board/action";
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
+import {deleteOne} from "../store/api/boardApi";
 import main from "../store/modules/main/reducer";
 
 const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, changePage, clickRow, closeModal, modifyData}) => {
@@ -30,6 +31,14 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
         closeModal();
     }
 
+    const handleDelete = () => {
+        deleteOne(modalData.id)
+            .then(response => {
+                changePage(pageNumber, pageSize);
+                closeModal();
+            });
+    }
+
     return (
         <div>
             <Board
@@ -49,6 +58,7 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 isModalOpen={isModalOpen}
                 modalData={modalData}
                 handleClose={closeModal}
+                handleDelete={handleDelete}
                 handleModify={handleModify}
             />
             : null}
