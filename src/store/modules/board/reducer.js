@@ -7,7 +7,8 @@ const initialState = {
     pageSize: BOARD_PAGE_SIZE,
     selectedData: [],
     isModalOpen: false,
-    modalData: {}
+    modalData: {},
+    isWriteModal: false,
 }
 
 export default handleActions({
@@ -25,11 +26,17 @@ export default handleActions({
         [type.CLOSE_MODAL]: (state, action) => ({
             ...state,
             isModalOpen: false,
+            isWriteModal: false,
             modalData: {},
         }),
         [type.MODIFY_DATA]: (state, action) => ({
             ...state,
             selectedData: action.payload,
+        }),
+        [type.CLICK_WRITE_BUTTON]: (state, action) => ({
+            ...state,
+            isModalOpen: true,
+            isWriteModal: true,
         })
     }, initialState
 )
