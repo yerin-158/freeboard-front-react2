@@ -27,3 +27,11 @@ export async function joinApi(accountId, password) {
         return response;
     }
 }
+
+export async function logoutApi() {
+    try {
+        await axios.get(DOMAIN+'/logout');
+    } catch (error) {
+        /* error control */
+    }
+}
