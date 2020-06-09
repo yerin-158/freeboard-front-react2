@@ -4,7 +4,7 @@ import {changePage, clickRow, closeModal, clickWriteButton, modifyData} from "..
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
 import {deleteOne, post} from "../store/api/boardApi";
-import main from "../store/modules/main/reducer";
+import Topbar from "../components/Topbar";
 
 const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, changePage, clickRow, closeModal, clickWriteButton, modifyData}) => {
 
@@ -49,6 +49,10 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
 
     return (
         <div>
+            <Topbar
+                title="게시판"
+                accountId={accountId}
+            />
             <Board
                 pageNumber={pageNumber}
                 pageSize={pageSize}
