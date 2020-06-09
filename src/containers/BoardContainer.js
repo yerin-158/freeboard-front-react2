@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {connect} from 'react-redux';
-import {changePage, clickRow, closeModal, modifyData} from "../store/modules/board/action";
+import {changePage, clickRow, closeModal, clickWriteButton, modifyData} from "../store/modules/board/action";
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
-import {deleteOne} from "../store/api/boardApi";
+import {deleteOne, post} from "../store/api/boardApi";
 import main from "../store/modules/main/reducer";
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, changePage, clickRow, closeModal, modifyData}) => {
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, changePage, clickRow, closeModal, clickWriteButton, modifyData}) => {
 
     useEffect(() => {
         changePage(pageNumber, pageSize);
@@ -39,6 +39,14 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
             });
     }
 
+    const handleWrite = (writeData) => {
+        post(writeData)
+            .then(response => {
+                changePage(0, pageSize);
+                closeModal();
+            })
+    }
+
     return (
         <div>
             <Board
@@ -47,6 +55,7 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 selectedData={selectedData}
                 handleChangePageNumber={handleChangePageNumber}
                 handleChangePageSize={handleChangePageSize}
+                handleWriteButtonClick={clickWriteButton}
                 handleRowClick={clickRow}
                 columns={columns}
                 data={selectedData}
@@ -59,7 +68,8 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 modalData={modalData}
                 handleClose={closeModal}
                 handleDelete={handleDelete}
-                handleModify={handleModify}
+                handleSave={isWriteModal? handleWrite : handleModify}
+                isWriteModal={isWriteModal}
             />
             : null}
         </div>
@@ -72,13 +82,15 @@ const mapStateToProps = state => ({
     selectedData : state.board.selectedData,
     isModalOpen: state.board.isModalOpen,
     modalData: state.board.modalData,
-    accountId: state.main.accountId
+    accountId: state.main.accountId,
+    isWriteModal: state.board.isWriteModal
 })
 
 const mapDispatchToProps = dispatch => ({
     changePage : (pageNumber, pageSize) => dispatch(changePage(pageNumber, pageSize)),
     clickRow: (rowData) => dispatch(clickRow(rowData)),
     closeModal: () => dispatch(closeModal()),
+    clickWriteButton: () => dispatch(clickWriteButton()),
     modifyData: (id, updatedData, allData) => dispatch(modifyData(id, updatedData, allData)),
 })
 
