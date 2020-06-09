@@ -29,6 +29,11 @@ export const closeModal = () => ({
     type: type.CLOSE_MODAL,
 })
 
+export const clickWriteButton = () => ({
+    type: type.CLICK_WRITE_BUTTON,
+})
+
+
 export const modifyData = (id, updatedData, allData) => dispatch => {
     return update(id, updatedData)
         .then(response => {

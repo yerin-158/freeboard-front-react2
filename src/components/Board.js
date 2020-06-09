@@ -1,7 +1,10 @@
 import React, {useEffect} from 'react';
-import MaterialTable from 'material-table';
+import MaterialTable, {MTableToolbar} from 'material-table';
+import {Button, Grid} from "@material-ui/core";
 
 import {forwardRef} from 'react';
+import {useHistory} from "react-router-dom";
+import {logoutApi} from "../store/api/userApi";
 
 import {BOARD_PAGE_SIZE} from '../static/constant';
 
@@ -43,14 +46,15 @@ const tableIcons = {
 };
 
 
-export default function Board({pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick}) {
+export default function Board({pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick}) {
+    const history = useHistory();
 
     return (
         <MaterialTable
             onChangePage={handleChangePageNumber}
             onChangeRowsPerPage={handleChangePageSize}
             icons={tableIcons}
-            title={"게시판 (login user : "+accountId+")"}
+            title={"게시판" + (typeof accountId != 'undefined' && accountId != null ? " (login user : " + accountId + ")" : "")}
             columns={columns}
             data={selectedData}
             options={{
@@ -59,6 +63,28 @@ export default function Board({pageNumber, pageSize, selectedData, columns, data
             }}
             onRowClick={(event, rowData) => {
                 handleRowClick(rowData);
+            }}
+            components={{
+                Toolbar: props => (
+                    <div>
+                        <MTableToolbar {...props} />
+                        <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                            {typeof accountId != 'undefined' && accountId != null ?
+                                <Grid>
+                                    <Button color="primary" onClick={() => handleWriteButtonClick()}>글쓰기</Button>
+                                    <Button onClick={async () => {
+                                        await logoutApi();
+                                        history.push("/")
+                                    }}>로그아웃</Button>
+                                </Grid>
+                                :
+                                <Grid>
+                                    <Button color="secondary" onClick={() => history.push("/")}>로그인하기</Button>
+                                </Grid>
+                            }
+                        </Grid>
+                    </div>
+                )
             }}
         />
     );
