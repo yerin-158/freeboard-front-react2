@@ -1,10 +1,7 @@
-import React, {useEffect} from 'react';
-import MaterialTable, {MTableToolbar} from 'material-table';
-import {Button, Grid} from "@material-ui/core";
-
-import {forwardRef} from 'react';
-import {useHistory} from "react-router-dom";
-import {logoutApi} from "../store/api/userApi";
+import React, {forwardRef, useState} from 'react';
+import MaterialTable from 'material-table';
+import {Button, Grid, TextField} from "@material-ui/core";
+import {useHistory} from 'react-router-dom';
 
 import {BOARD_PAGE_SIZE} from '../static/constant';
 
@@ -22,8 +19,10 @@ import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
+import SearchIcon from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
-import {clickRow} from "../store/modules/board/action";
+import {makeStyles} from '@material-ui/core/styles';
+
 
 const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref}/>),
@@ -45,19 +44,40 @@ const tableIcons = {
     ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref}/>)
 };
 
+const useStyles = makeStyles((theme) => ({
+    margin: {
+        margin: theme.spacing(2),
+    },
+    root: {
+        flexGrow: 1,
+    },
+    paper: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+    },
+}));
 
-export default function Board({pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick}) {
-    const history = useHistory();
+export default function Board({keywordInStore, pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, handleSearch, handleShowAllContentsButton}) {
+    const classes = useStyles();
+
+    let searchKeyword = "";
+    const setSearchKeyword = (value) => {
+       searchKeyword = value;
+       console.log(searchKeyword);
+    }
 
     return (
         <MaterialTable
             onChangePage={handleChangePageNumber}
             onChangeRowsPerPage={handleChangePageSize}
             icons={tableIcons}
-            title={"게시판" + (typeof accountId != 'undefined' && accountId != null ? " (login user : " + accountId + ")" : "")}
             columns={columns}
+            page={pageNumber}
             data={selectedData}
+            pagenationType="stepped"
             options={{
+                search: false,
                 paginationType: "stepped",
                 pageSize: BOARD_PAGE_SIZE
             }}
@@ -66,25 +86,42 @@ export default function Board({pageNumber, pageSize, selectedData, columns, data
             }}
             components={{
                 Toolbar: props => (
-                    <div>
-                        <MTableToolbar {...props} />
-                        <Grid container alignItems="flex-start" justify="flex-end" direction="row">
+                    <Grid container>
+                        <Grid item xs={6}>
                             {typeof accountId != 'undefined' && accountId != null ?
-                                <Grid>
-                                    <Button color="primary" onClick={() => handleWriteButtonClick()}>글쓰기</Button>
-                                    <Button onClick={async () => {
-                                        await logoutApi();
-                                        history.push("/")
-                                    }}>로그아웃</Button>
+                                <Grid className={classes.margin}>
+                                    <Button color="primary" size="medium" variant="outlined"
+                                            onClick={() => handleWriteButtonClick()}>글쓰기</Button>
                                 </Grid>
-                                :
-                                <Grid>
-                                    <Button color="secondary" onClick={() => history.push("/")}>로그인하기</Button>
-                                </Grid>
+                                : null
                             }
                         </Grid>
-                    </div>
-                )
+                        <Grid item xs={6}>
+                            <Grid container alignItems="center" justify="flex-end" direction="row">
+                                <Grid className={classes.margin}>
+                                    <Grid container spacing={1} alignItems="flex-end">
+                                        <Grid item>
+                                            <SearchIcon/>
+                                        </Grid>
+                                        <Grid item>
+                                            <TextField id="input-with-icon-grid"
+                                                       placeholder={keywordInStore != "" ? "검색어: "+keywordInStore : "검색어를 입력하세요."}
+                                                       onChange={event => setSearchKeyword(event.target.value)}/>
+                                        </Grid>
+                                        <Grid>
+                                            <Button color="primary" size="medium" onClick={() => handleSearch(pageSize, "ALL", searchKeyword)}>Search</Button>
+                                        </Grid>
+                                        <Grid>
+                                            <Button color="secondary" size="medium"
+                                                    onClick={() => handleShowAllContentsButton(pageSize)}>전체글
+                                                보기</Button>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                ),
             }}
         />
     );
