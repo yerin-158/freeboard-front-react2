@@ -22,15 +22,29 @@ export const changePage = (pageNumber, pageSize, searchType, keyword, isSearch) 
     })
 }
 
-export const keywordSearchAllType = (keyword) => ({
-    type: type.KEYWORD_SEARCH_ALL_TYPE,
-    payload: keyword,
-})
+export const keywordSearch = (pageSize, searchType, keyword) => dispatch => {
+    const pageNumber = 0;
+    return getForSearch(pageNumber + 1, pageSize, searchType, keyword)
+        .then(response => {
+            const selectedData = getData(pageNumber, pageSize, response);
+            dispatch({
+                type: type.KEYWORD_SEARCH,
+                payload: {
+                    keyword: keyword,
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    selectedData: selectedData
+                }
+            })
+        }).catch(error => {
+            /* error control */
+        })
+}
 
 export const changeShowAllContents = (pageSize) => dispatch => {
     const pageNumber = 0;
 
-    return  get(pageNumber + 1, pageSize)
+    return get(pageNumber + 1, pageSize)
         .then(response => {
             const selectedData = getData(pageNumber, pageSize, response);
             dispatch({
