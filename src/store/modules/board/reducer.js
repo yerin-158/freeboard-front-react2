@@ -50,11 +50,14 @@ export default handleActions({
             pageSize: action.payload.pageSize,
             selectedData: action.payload.selectedData
         }),
-        [type.KEYWORD_SEARCH_ALL_TYPE]: (state, action) => ({
+        [type.KEYWORD_SEARCH]: (state, action) => ({
             ...state,
             isSearch: true,
-            keyword: action.payload,
-            boardId: (state.boardId === 0 ? 1 : 0)
+            keyword: action.payload.keyword,
+            boardId: (state.boardId === 0 ? 1 : 0),
+            pageNumber: action.payload.pageNumber,
+            pageSize: action.payload.pageSize,
+            selectedData: action.payload.selectedData
         })
     }, initialState
 )
