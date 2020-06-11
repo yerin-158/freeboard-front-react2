@@ -16,3 +16,7 @@ export function deleteOne(id) {
 export function post(writeData) {
     return axios.post(DOMAIN+'/api/boards', writeData);
 }
+
+export function getForSearch(pageNumber, pageSize, searchType, keyword) {
+    return axios.get(DOMAIN+"/api/boards?page="+pageNumber+"&size="+pageSize+"&type="+searchType+"&keyword="+keyword);
+}
