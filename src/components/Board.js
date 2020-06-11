@@ -1,6 +1,7 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useState} from 'react';
 import MaterialTable from 'material-table';
 import {Button, Grid, TextField} from "@material-ui/core";
+import {useHistory} from 'react-router-dom';
 
 import {BOARD_PAGE_SIZE} from '../static/constant';
 
@@ -57,8 +58,14 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Board({pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, keywordSearchAllType, handleShowAllContentsButton}) {
+export default function Board({keywordInStore, pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, handleSearch, handleShowAllContentsButton}) {
     const classes = useStyles();
+
+    let searchKeyword = "";
+    const setSearchKeyword = (value) => {
+       searchKeyword = value;
+       console.log(searchKeyword);
+    }
 
     return (
         <MaterialTable
@@ -97,10 +104,12 @@ export default function Board({pageNumber, pageSize, selectedData, columns, data
                                             <SearchIcon/>
                                         </Grid>
                                         <Grid item>
-                                            <TextField id="input-with-icon-grid" />
+                                            <TextField id="input-with-icon-grid"
+                                                       placeholder={keywordInStore != "" ? "검색어: "+keywordInStore : "검색어를 입력하세요."}
+                                                       onChange={event => setSearchKeyword(event.target.value)}/>
                                         </Grid>
                                         <Grid>
-                                            <Button color="primary" size="medium">Search</Button>
+                                            <Button color="primary" size="medium" onClick={() => handleSearch(pageSize, "ALL", searchKeyword)}>Search</Button>
                                         </Grid>
                                         <Grid>
                                             <Button color="secondary" size="medium"
