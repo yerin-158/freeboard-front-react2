@@ -9,6 +9,9 @@ const initialState = {
     isModalOpen: false,
     modalData: {},
     isWriteModal: false,
+    isSearch: false,
+    keyword: "",
+    boardId: 0,
 }
 
 export default handleActions({
@@ -37,6 +40,21 @@ export default handleActions({
             ...state,
             isModalOpen: true,
             isWriteModal: true,
+        }),
+        [type.CHANGE_SHOWING_ALL_CONTENTS]: (state, action) => ({
+            ...state,
+            isSearch: false,
+            keyword: "",
+            boardId: (state.boardId === 0 ? 1 : 0),
+            pageNumber: action.payload.pageNumber,
+            pageSize: action.payload.pageSize,
+            selectedData: action.payload.selectedData
+        }),
+        [type.KEYWORD_SEARCH_ALL_TYPE]: (state, action) => ({
+            ...state,
+            isSearch: true,
+            keyword: action.payload,
+            boardId: (state.boardId === 0 ? 1 : 0)
         })
     }, initialState
 )
