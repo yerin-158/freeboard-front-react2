@@ -1,8 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import MaterialTable, {MTableToolbar} from 'material-table';
-import {Button, Grid, TextField, Typography} from "@material-ui/core";
-
-import {forwardRef} from 'react';
+import React, {forwardRef} from 'react';
+import MaterialTable from 'material-table';
+import {Button, Grid, TextField} from "@material-ui/core";
 
 import {BOARD_PAGE_SIZE} from '../static/constant';
 
@@ -20,12 +18,9 @@ import LastPage from '@material-ui/icons/LastPage';
 import Remove from '@material-ui/icons/Remove';
 import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
-import ViewColumn from '@material-ui/icons/ViewColumn';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import {clickRow} from "../store/modules/board/action";
-import {makeStyles} from '@material-ui/core/styles';
-
 import SearchIcon from '@material-ui/icons/Search';
+import ViewColumn from '@material-ui/icons/ViewColumn';
+import {makeStyles} from '@material-ui/core/styles';
 
 
 const tableIcons = {
@@ -62,9 +57,8 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Board({pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick}) {
+export default function Board({pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, keywordSearchAllType, handleShowAllContentsButton}) {
     const classes = useStyles();
-
 
     return (
         <MaterialTable
@@ -72,7 +66,9 @@ export default function Board({pageNumber, pageSize, selectedData, columns, data
             onChangeRowsPerPage={handleChangePageSize}
             icons={tableIcons}
             columns={columns}
+            page={pageNumber}
             data={selectedData}
+            pagenationType="stepped"
             options={{
                 search: false,
                 paginationType: "stepped",
@@ -101,17 +97,22 @@ export default function Board({pageNumber, pageSize, selectedData, columns, data
                                             <SearchIcon/>
                                         </Grid>
                                         <Grid item>
-                                            <TextField id="input-with-icon-grid"/>
+                                            <TextField id="input-with-icon-grid" />
                                         </Grid>
                                         <Grid>
                                             <Button color="primary" size="medium">Search</Button>
+                                        </Grid>
+                                        <Grid>
+                                            <Button color="secondary" size="medium"
+                                                    onClick={() => handleShowAllContentsButton(pageSize)}>전체글
+                                                보기</Button>
                                         </Grid>
                                     </Grid>
                                 </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                )
+                ),
             }}
         />
     );
