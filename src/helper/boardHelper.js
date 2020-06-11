@@ -5,6 +5,12 @@ export const getData = (pageNumber, pageSize, response) => {
     const realData = setRealData(response.data.contents);
 
     if (isFirstPage(pageNumber)) {
+        if (realData.length === 0){
+            return new Array();
+        }
+        if (response.data.totalPages === 1) {
+            return realData;
+        }
         return realData.concat(nextFakeData);
     } else if (isLastPage(pageNumber, response)) {
         return prevFakeData.concat(realData);

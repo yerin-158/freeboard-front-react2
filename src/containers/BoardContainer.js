@@ -20,13 +20,11 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
     ]
 
     const handleChangePageNumber = (pageNumber) => {
-        console.log("handleChangePageNumber");
-        changePage(pageNumber, pageSize);
+        changePage(pageNumber, pageSize, "ALL", keyword, isSearch);
     };
 
     const handleChangePageSize = (pageSize) => {
-        console.log("handleChangePageSize");
-        changePage(pageNumber, pageSize);
+        changePage(pageNumber, pageSize, "ALL", keyword, isSearch);
     };
 
     const handleModify = (updatedData) => {
@@ -103,7 +101,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
-    changePage : (pageNumber, pageSize) => dispatch(changePage(pageNumber, pageSize)),
+    changePage : (pageNumber, pageSize, searchType, keyword, isSearch) => dispatch(changePage(pageNumber, pageSize, searchType, keyword, isSearch)),
     clickRow: (rowData) => dispatch(clickRow(rowData)),
     closeModal: () => dispatch(closeModal()),
     clickWriteButton: () => dispatch(clickWriteButton()),
