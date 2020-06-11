@@ -1,13 +1,13 @@
 import React, {useEffect, useState, useRef} from "react";
 import {connect} from 'react-redux';
-import {changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearchAllType, changeShowAllContents} from "../store/modules/board/action";
+import {changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents} from "../store/modules/board/action";
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
 import {deleteOne, post} from "../store/api/boardApi";
 import Topbar from "../components/Topbar";
 import TextField from '@material-ui/core/TextField';
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, isSearch, keyword, boardId, changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearchAllType, changeShowAllContents}) => {
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, isSearch, keyword, boardId, changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents}) => {
 
     useEffect(() => {
         changePage(pageNumber, pageSize);
@@ -61,11 +61,12 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 pageNumber={pageNumber}
                 pageSize={pageSize}
                 selectedData={selectedData}
+                keywordInStore={keyword}
                 handleChangePageNumber={handleChangePageNumber}
                 handleChangePageSize={handleChangePageSize}
                 handleWriteButtonClick={clickWriteButton}
                 handleRowClick={clickRow}
-                handleSearch={keywordSearchAllType}
+                handleSearch={keywordSearch}
                 handleShowAllContentsButton={changeShowAllContents}
                 columns={columns}
                 data={selectedData}
@@ -107,8 +108,8 @@ const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch(closeModal()),
     clickWriteButton: () => dispatch(clickWriteButton()),
     modifyData: (id, updatedData, allData) => dispatch(modifyData(id, updatedData, allData)),
-    keywordSearchAllType: (keyword) => dispatch(keywordSearchAllType(keyword)),
     changeShowAllContents: (pageSize) => dispatch(changeShowAllContents(pageSize)),
+    keywordSearch: (pageSize, searchType, keyword) => dispatch(keywordSearch(pageSize, searchType, keyword)),
 })
 
 export default connect(
