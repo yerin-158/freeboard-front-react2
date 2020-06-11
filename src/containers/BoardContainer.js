@@ -1,12 +1,13 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import {connect} from 'react-redux';
-import {changePage, clickRow, closeModal, clickWriteButton, modifyData} from "../store/modules/board/action";
+import {changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearchAllType, changeShowAllContents} from "../store/modules/board/action";
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
 import {deleteOne, post} from "../store/api/boardApi";
 import Topbar from "../components/Topbar";
+import TextField from '@material-ui/core/TextField';
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, changePage, clickRow, closeModal, clickWriteButton, modifyData}) => {
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, isSearch, keyword, boardId, changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearchAllType, changeShowAllContents}) => {
 
     useEffect(() => {
         changePage(pageNumber, pageSize);
@@ -19,10 +20,12 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
     ]
 
     const handleChangePageNumber = (pageNumber) => {
+        console.log("handleChangePageNumber");
         changePage(pageNumber, pageSize);
     };
 
     const handleChangePageSize = (pageSize) => {
+        console.log("handleChangePageSize");
         changePage(pageNumber, pageSize);
     };
 
@@ -54,6 +57,7 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 accountId={accountId}
             />
             <Board
+                key={boardId}
                 pageNumber={pageNumber}
                 pageSize={pageSize}
                 selectedData={selectedData}
@@ -61,6 +65,8 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 handleChangePageSize={handleChangePageSize}
                 handleWriteButtonClick={clickWriteButton}
                 handleRowClick={clickRow}
+                handleSearch={keywordSearchAllType}
+                handleShowAllContentsButton={changeShowAllContents}
                 columns={columns}
                 data={selectedData}
                 accountId={accountId}
@@ -70,6 +76,8 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 userLoggedIn={accountId}
                 isModalOpen={isModalOpen}
                 modalData={modalData}
+                isSearch={isSearch}
+                keyword={keyword}
                 handleClose={closeModal}
                 handleDelete={handleDelete}
                 handleSave={isWriteModal? handleWrite : handleModify}
@@ -87,7 +95,10 @@ const mapStateToProps = state => ({
     isModalOpen: state.board.isModalOpen,
     modalData: state.board.modalData,
     accountId: state.main.accountId,
-    isWriteModal: state.board.isWriteModal
+    isWriteModal: state.board.isWriteModal,
+    isSearch: state.board.isSearch,
+    keyword: state.board.keyword,
+    boardId: state.board.boardId,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -96,6 +107,8 @@ const mapDispatchToProps = dispatch => ({
     closeModal: () => dispatch(closeModal()),
     clickWriteButton: () => dispatch(clickWriteButton()),
     modifyData: (id, updatedData, allData) => dispatch(modifyData(id, updatedData, allData)),
+    keywordSearchAllType: (keyword) => dispatch(keywordSearchAllType(keyword)),
+    changeShowAllContents: (pageSize) => dispatch(changeShowAllContents(pageSize)),
 })
 
 export default connect(
