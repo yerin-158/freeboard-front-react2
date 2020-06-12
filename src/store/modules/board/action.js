@@ -94,3 +94,8 @@ export const modifyData = (id, updatedData, allData) => dispatch => {
             /* error control */
         })
 }
+
+export const searchTypeSelectorChange = (value) => ({
+    type : type.SEARCH_TYPE_SELECTOR_CHANGE,
+    payload : value
+})

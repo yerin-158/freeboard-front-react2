@@ -1,9 +1,7 @@
-import React, {forwardRef, useState} from 'react';
+import React, {forwardRef} from 'react';
 import MaterialTable from 'material-table';
 import {Button, Grid, TextField} from "@material-ui/core";
-import {useHistory} from 'react-router-dom';
-
-import {BOARD_PAGE_SIZE} from '../static/constant';
+import {BOARD_PAGE_SIZE, searchType as searchTypes} from '../static/constant';
 
 import AddBox from '@material-ui/icons/AddBox';
 import ArrowDownward from '@material-ui/icons/ArrowDownward';
@@ -22,6 +20,7 @@ import Search from '@material-ui/icons/Search';
 import SearchIcon from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 import {makeStyles} from '@material-ui/core/styles';
+import Selector from "./Selector";
 
 
 const tableIcons = {
@@ -56,6 +55,9 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+    selectEmpty: {
+        marginTop: theme.spacing(2),
+    },
 }));
 
 export default function Board({keywordInStore, pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, handleSearch, handleShowAllContentsButton}) {
@@ -63,9 +65,8 @@ export default function Board({keywordInStore, pageNumber, pageSize, selectedDat
 
     let searchKeyword = "";
     const setSearchKeyword = (value) => {
-       searchKeyword = value;
-       console.log(searchKeyword);
-    }
+        searchKeyword = value;
+    };
 
     return (
         <MaterialTable
@@ -104,12 +105,18 @@ export default function Board({keywordInStore, pageNumber, pageSize, selectedDat
                                             <SearchIcon/>
                                         </Grid>
                                         <Grid item>
+                                            <Selector
+                                                dataList={searchTypes}
+                                            />
+                                        </Grid>
+                                        <Grid item>
                                             <TextField id="input-with-icon-grid"
-                                                       placeholder={keywordInStore != "" ? "검색어: "+keywordInStore : "검색어를 입력하세요."}
+                                                       placeholder={keywordInStore != "" ? "검색어: " + keywordInStore : "검색어를 입력하세요."}
                                                        onChange={event => setSearchKeyword(event.target.value)}/>
                                         </Grid>
                                         <Grid>
-                                            <Button color="primary" size="medium" onClick={() => handleSearch(pageSize, "ALL", searchKeyword)}>Search</Button>
+                                            <Button color="primary" size="medium"
+                                                    onClick={() => handleSearch(pageSize, "ALL", searchKeyword)}>Search</Button>
                                         </Grid>
                                         <Grid>
                                             <Button color="secondary" size="medium"
