@@ -1,13 +1,14 @@
 import React, {useEffect, useState, useRef} from "react";
 import {connect} from 'react-redux';
-import {changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents} from "../store/modules/board/action";
+import {changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents, searchTypeSelectorChange} from "../store/modules/board/action";
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
 import {deleteOne, post} from "../store/api/boardApi";
 import Topbar from "../components/Topbar";
 import TextField from '@material-ui/core/TextField';
+import {searchType} from "../static/constant";
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, isSearch, keyword, boardId, changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents}) => {
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, isSearch, keyword, boardId, searchType, changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents, searchTypeSelectorChange}) => {
 
     useEffect(() => {
         changePage(pageNumber, pageSize);
@@ -20,11 +21,11 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
     ]
 
     const handleChangePageNumber = (pageNumber) => {
-        changePage(pageNumber, pageSize, "ALL", keyword, isSearch);
+        changePage(pageNumber, pageSize, searchType, keyword, isSearch);
     };
 
     const handleChangePageSize = (pageSize) => {
-        changePage(pageNumber, pageSize, "ALL", keyword, isSearch);
+        changePage(pageNumber, pageSize, searchType, keyword, isSearch);
     };
 
     const handleModify = (updatedData) => {
@@ -58,7 +59,8 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 key={boardId}
                 pageNumber={pageNumber}
                 pageSize={pageSize}
-                selectedData={selectedData}
+                searchType={searchType}
+                handleChangeSearchTypeSelect={searchTypeSelectorChange}
                 keywordInStore={keyword}
                 handleChangePageNumber={handleChangePageNumber}
                 handleChangePageSize={handleChangePageSize}
@@ -67,7 +69,7 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 handleSearch={keywordSearch}
                 handleShowAllContentsButton={changeShowAllContents}
                 columns={columns}
-                data={selectedData}
+                selectedData={selectedData}
                 accountId={accountId}
             />
             { isModalOpen ?
@@ -98,6 +100,7 @@ const mapStateToProps = state => ({
     isSearch: state.board.isSearch,
     keyword: state.board.keyword,
     boardId: state.board.boardId,
+    searchType: state.board.searchType,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -108,6 +111,7 @@ const mapDispatchToProps = dispatch => ({
     modifyData: (id, updatedData, allData) => dispatch(modifyData(id, updatedData, allData)),
     changeShowAllContents: (pageSize) => dispatch(changeShowAllContents(pageSize)),
     keywordSearch: (pageSize, searchType, keyword) => dispatch(keywordSearch(pageSize, searchType, keyword)),
+    searchTypeSelectorChange: (value) => dispatch(searchTypeSelectorChange(value)),
 })
 
 export default connect(
