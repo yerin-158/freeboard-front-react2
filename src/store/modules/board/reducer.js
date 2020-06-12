@@ -12,7 +12,8 @@ const initialState = {
     isSearch: false,
     keyword: "",
     boardId: 0,
-}
+    selectedValue: "",
+};
 
 export default handleActions({
         [type.CHANGE_PAGE]: (state, action) => ({
@@ -58,6 +59,10 @@ export default handleActions({
             pageNumber: action.payload.pageNumber,
             pageSize: action.payload.pageSize,
             selectedData: action.payload.selectedData
+        }),
+        [type.SEARCH_TYPE_SELECTOR_CHANGE]: (state, action) => ({
+            ...state,
+            selectedValue: action.payload
         })
     }, initialState
 )
