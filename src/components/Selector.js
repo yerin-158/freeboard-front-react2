@@ -8,13 +8,12 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function Selector({dataList}) {
+export default function Selector({dataList, selectedValue, handleChangeSelect}) {
     const classes = useStyles();
-    const [selectedValue, setSelectedValue] = useState(dataList[0].value);
 
     return (<Select
-        value={selectedValue}
-        onChange={(event) => setSelectedValue(event.target.value)}
+        value={selectedValue === "" ? dataList[0].value : selectedValue}
+        onChange={event => handleChangeSelect(event.target.value)}
         displayEmpty
         className={classes.selectEmpty}
         inputProps={{'aria-label': 'Without label'}}
