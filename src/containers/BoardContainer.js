@@ -8,7 +8,8 @@ import Topbar from "../components/Topbar";
 import TextField from '@material-ui/core/TextField';
 import {searchType} from "../static/constant";
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, isWriteModal, isSearch, keyword, boardId, searchType, changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents, searchTypeSelectorChange}) => {
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, role, isWriteModal, isSearch, keyword, boardId, searchType,
+                            changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents, searchTypeSelectorChange}) => {
 
     useEffect(() => {
         changePage(pageNumber, pageSize);
@@ -75,6 +76,7 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
             { isModalOpen ?
             <ContentsModal
                 userLoggedIn={accountId}
+                userRoleLoggedIn={role}
                 isModalOpen={isModalOpen}
                 modalData={modalData}
                 isSearch={isSearch}
@@ -96,6 +98,7 @@ const mapStateToProps = state => ({
     isModalOpen: state.board.isModalOpen,
     modalData: state.board.modalData,
     accountId: state.main.accountId,
+    role: state.main.role,
     isWriteModal: state.board.isWriteModal,
     isSearch: state.board.isSearch,
     keyword: state.board.keyword,
