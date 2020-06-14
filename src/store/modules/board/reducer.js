@@ -12,7 +12,7 @@ const initialState = {
     isSearch: false,
     keyword: "",
     boardId: 0,
-    selectedValue: "",
+    searchType: "",
 };
 
 export default handleActions({
@@ -62,7 +62,7 @@ export default handleActions({
         }),
         [type.SEARCH_TYPE_SELECTOR_CHANGE]: (state, action) => ({
             ...state,
-            selectedValue: action.payload
+            searchType: action.payload
         })
     }, initialState
 )

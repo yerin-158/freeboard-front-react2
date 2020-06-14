@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {Button, Modal, TextField, Typography, Grid} from '@material-ui/core';
+import {isAdminRole} from '../helper/specification';
 
 function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ContentsModal({isModalOpen, modalData, userLoggedIn, isWriteModal, handleClose, handleSave, handleDelete}) {
+export default function ContentsModal({isModalOpen, modalData, userLoggedIn, userRoleLoggedIn, isWriteModal, handleClose, handleSave, handleDelete}) {
     const classes = useStyles();
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
@@ -123,6 +124,7 @@ export default function ContentsModal({isModalOpen, modalData, userLoggedIn, isW
                                             handleDelete={handleDelete}
                                             writer={modalData.writer}
                                             userLoggedIn={userLoggedIn}
+                                            userRoleLoggedIn={userRoleLoggedIn}
                                         />
                                     }
                                     <Button onClick={() => {
@@ -140,16 +142,13 @@ export default function ContentsModal({isModalOpen, modalData, userLoggedIn, isW
 }
 
 
-function ModalButtons({writer, userLoggedIn, setIsModify, handleDelete}) {
+function ModalButtons({writer, userLoggedIn, setIsModify, handleDelete, userRoleLoggedIn}) {
     return (
         <span>
-            {writer.accountId == userLoggedIn ?
-                <Grid>
-                    <Button color="primary" onClick={() => setIsModify(true)}>Modify</Button>
-                    <Button color="secondary" onClick={() => handleDelete()}>Delete</Button>
-                </Grid>
-                : null
-            }
+            <Grid>
+            {writer.accountId == userLoggedIn ? <Button color="primary" onClick={() => setIsModify(true)}>Modify</Button> : null}
+            {isAdminRole(userRoleLoggedIn) || writer.accountId == userLoggedIn ? <Button color="secondary" onClick={() => handleDelete()}>Delete</Button> : null}
+            </Grid>
         </span>
     );
 }

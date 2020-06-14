@@ -2,7 +2,7 @@ import {createAction} from "redux-actions";
 import type from './type'
 
 export const loginSuccess = createAction(
-    type.LOGIN_SUCCESS, accountId => accountId
+    type.LOGIN_SUCCESS, (accountId, role) => ({accountId, role})
 );
 
 export const loginFail = createAction(

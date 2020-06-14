@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Board({keywordInStore, pageNumber, pageSize, selectedData, columns, data, accountId, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, handleSearch, handleShowAllContentsButton}) {
+export default function Board({keywordInStore, pageNumber, pageSize, columns, selectedData, accountId, searchType, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, handleSearch, handleShowAllContentsButton, handleChangeSearchTypeSelect}) {
     const classes = useStyles();
 
     let searchKeyword = "";
@@ -107,6 +107,8 @@ export default function Board({keywordInStore, pageNumber, pageSize, selectedDat
                                         <Grid item>
                                             <Selector
                                                 dataList={searchTypes}
+                                                selectedValue={searchType}
+                                                handleChangeSelect={handleChangeSearchTypeSelect}
                                             />
                                         </Grid>
                                         <Grid item>
@@ -116,7 +118,7 @@ export default function Board({keywordInStore, pageNumber, pageSize, selectedDat
                                         </Grid>
                                         <Grid>
                                             <Button color="primary" size="medium"
-                                                    onClick={() => handleSearch(pageSize, "ALL", searchKeyword)}>Search</Button>
+                                                    onClick={() => handleSearch(pageSize, searchType, searchKeyword)}>Search</Button>
                                         </Grid>
                                         <Grid>
                                             <Button color="secondary" size="medium"

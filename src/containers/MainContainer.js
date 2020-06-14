@@ -1,23 +1,23 @@
-import React, {useEffect} from "react";
+import React from "react";
 import {connect} from 'react-redux';
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 
 import Main from "../components/Main";
 
 import {joinApi, loginApi} from '../store/api/userApi';
-import {loginSuccess, loginFail, pageChange, joinFail} from "../store/modules/main/action";
+import {joinFail, loginFail, loginSuccess, pageChange} from "../store/modules/main/action";
 
 
-const MainContainer = ({accountId, isLogged, isLoginPage,  errorMessage, loginSuccess, loginFail, pageChange, joinFail}) => {
+const MainContainer = ({isLoginPage, errorMessage, loginSuccess, loginFail, pageChange, joinFail}) => {
     let history = useHistory();
 
     const loginSubmit = async (id, password) => {
         var response = await loginApi(id, password);
-        if (typeof response.data.code != "undefined"){
+        if (typeof response.data.code != "undefined") {
             loginFail(response.data.message);
         } else {
-            loginSuccess(id);
+            loginSuccess(response.data.accountId, response.data.role);
             alert("로그인에 성공하셨습니다. 게시판으로 이동합니다.");
             history.push("/board");
         }
@@ -25,7 +25,7 @@ const MainContainer = ({accountId, isLogged, isLoginPage,  errorMessage, loginSu
 
     const joinSubmit = async (id, password) => {
         var response = await joinApi(id, password);
-        if (typeof response.data.code != "undefined"){
+        if (typeof response.data.code != "undefined") {
             joinFail(response.data.message);
         } else {
             alert("회원 가입에 성공하셨습니다. 로그인 페이지로 이동합니다.");
@@ -34,24 +34,24 @@ const MainContainer = ({accountId, isLogged, isLoginPage,  errorMessage, loginSu
     }
 
     return <Main
-        handleClick={isLoginPage? loginSubmit : joinSubmit}
+        handleClick={isLoginPage ? loginSubmit : joinSubmit}
         message={errorMessage}
         isLoginPage={isLoginPage}
         pageChange={pageChange}
-        />;
+    />;
 }
 
 const mapStateToProps = state => ({
     accountId: state.main.accountId,
     isLogged: state.main.isLogged,
     errorMessage: state.main.errorMessage,
-    isLoginPage: state.main.isLoginPage
+    isLoginPage: state.main.isLoginPage,
 })
 
 const mapDispatchToProps = dispatch => ({
-    loginSuccess: (accountId) => dispatch(loginSuccess(accountId)),
+    loginSuccess: (accountId, role) => dispatch(loginSuccess(accountId, role)),
     loginFail: (errorMessage) => dispatch(loginFail(errorMessage)),
-    pageChange : () => dispatch(pageChange()),
+    pageChange: () => dispatch(pageChange()),
     joinFail: (errorMessage) => dispatch(joinFail(errorMessage))
 })
 

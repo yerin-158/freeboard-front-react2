@@ -5,13 +5,15 @@ const initialState = {
     accountId : null,
     isLogged : false,
     errorMessage : null,
-    isLoginPage : true
+    isLoginPage : true,
+    role : null
 }
 
 export default handleActions({
         [type.LOGIN_SUCCESS] : (state, action) => ({
             ...state,
-            accountId: action.payload,
+            accountId: action.payload.accountId,
+            role: action.payload.role,
             isLogged: true
         }),
         [type.LOGIN_FAIL] : (state, action) => ({
