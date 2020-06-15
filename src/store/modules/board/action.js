@@ -89,21 +89,24 @@ export const clickWriteButton = () => ({
 export const modifyData = (id, updatedData, allData) => dispatch => {
     return update(id, updatedData)
         .then(response => {
-            allData.forEach(function (element) {
-                if (element.id == id) {
-                    for (var key in updatedData) {
-                        element[key] = updatedData[key];
+            if (typeof response.data.code != "undefined") {
+                dispatch(apiRequestError("", response.data.message))
+            } else {
+                allData.forEach(function (element) {
+                    if (element.id == id) {
+                        for (var key in updatedData) {
+                            element[key] = updatedData[key];
+                        }
+                        return;
                     }
-                    return;
-                }
-            })
-
+                })
+            }
             dispatch({
                 type: type.MODIFY_DATA,
                 payload: allData,
             })
         }).catch(error => {
-            /* error control */
+            dispatch(apiRequestError(error.response.status, error.message))
         })
 }
 

@@ -42,8 +42,6 @@ const MainContainer = ({isLoginPage, errorMessage, loginSuccess, loginFail, page
 }
 
 const mapStateToProps = state => ({
-    accountId: state.main.accountId,
-    isLogged: state.main.isLogged,
     errorMessage: state.main.errorMessage,
     isLoginPage: state.main.isLoginPage,
 })
