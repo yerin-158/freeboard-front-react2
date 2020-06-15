@@ -7,7 +7,7 @@ import {deleteOne, post} from "../store/api/boardApi";
 import Topbar from "../components/Topbar";
 import {useHistory} from "react-router-dom";
 
-const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, role, isWriteModal, isSearch, keyword, boardId, searchType,
+const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, role, isWriteModal, isSearch, keyword, boardId, searchType, isRequestFail, errorCode, errorMessage,
                             changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents, searchTypeSelectorChange}) => {
 
     const history = useHistory();
@@ -76,6 +76,9 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 columns={columns}
                 selectedData={selectedData}
                 accountId={accountId}
+                isRequestFail={isRequestFail}
+                errorCode={errorCode}
+                errorMessage={errorMessage}
             />
             { isModalOpen ?
             <ContentsModal
@@ -108,6 +111,9 @@ const mapStateToProps = state => ({
     keyword: state.board.keyword,
     boardId: state.board.boardId,
     searchType: state.board.searchType,
+    isRequestFail: state.board.isRequestFail,
+    errorCode: state.board.errorCode,
+    errorMessage: state.board.errorMessage,
 })
 
 const mapDispatchToProps = dispatch => ({
