@@ -8,17 +8,21 @@ export const changePage = (pageNumber, pageSize, searchType, keyword, isSearch) 
         getForSearch(pageNumber + 1, pageSize, searchType, keyword) : get(pageNumber + 1, pageSize));
 
     return requestApi.then(response => {
-        const selectedData = getData(pageNumber, pageSize, response);
-        dispatch({
-            type: type.CHANGE_PAGE,
-            payload: {
-                pageNumber: pageNumber,
-                pageSize: pageSize,
-                selectedData: selectedData
-            }
-        })
+        if (typeof response.data.code != "undefined") {
+            dispatch(apiRequestError("", response.data.message))
+        } else {
+            const selectedData = getData(pageNumber, pageSize, response);
+            dispatch({
+                type: type.CHANGE_PAGE,
+                payload: {
+                    pageNumber: pageNumber,
+                    pageSize: pageSize,
+                    selectedData: selectedData
+                }
+            })
+        }
     }).catch(error => {
-        /* error control */
+        dispatch(apiRequestError(error.response.status, error.message))
     })
 }
 
@@ -26,18 +30,22 @@ export const keywordSearch = (pageSize, searchType, keyword) => dispatch => {
     const pageNumber = 0;
     return getForSearch(pageNumber + 1, pageSize, searchType, keyword)
         .then(response => {
-            const selectedData = getData(pageNumber, pageSize, response);
-            dispatch({
-                type: type.KEYWORD_SEARCH,
-                payload: {
-                    keyword: keyword,
-                    pageNumber: pageNumber,
-                    pageSize: pageSize,
-                    selectedData: selectedData
-                }
-            })
+            if (typeof response.data.code != "undefined") {
+                dispatch(apiRequestError("", response.data.message))
+            } else {
+                const selectedData = getData(pageNumber, pageSize, response);
+                dispatch({
+                    type: type.KEYWORD_SEARCH,
+                    payload: {
+                        keyword: keyword,
+                        pageNumber: pageNumber,
+                        pageSize: pageSize,
+                        selectedData: selectedData
+                    }
+                })
+            }
         }).catch(error => {
-            /* error control */
+            dispatch(apiRequestError(error.response.status, error.message))
         })
 }
 
@@ -46,17 +54,21 @@ export const changeShowAllContents = (pageSize) => dispatch => {
 
     return get(pageNumber + 1, pageSize)
         .then(response => {
-            const selectedData = getData(pageNumber, pageSize, response);
-            dispatch({
-                type: type.CHANGE_SHOWING_ALL_CONTENTS,
-                payload: {
-                    pageNumber: pageNumber,
-                    pageSize: pageSize,
-                    selectedData: selectedData
-                }
-            })
+            if (typeof response.data.code != "undefined") {
+                dispatch(apiRequestError("", response.data.message))
+            } else {
+                const selectedData = getData(pageNumber, pageSize, response);
+                dispatch({
+                    type: type.CHANGE_SHOWING_ALL_CONTENTS,
+                    payload: {
+                        pageNumber: pageNumber,
+                        pageSize: pageSize,
+                        selectedData: selectedData
+                    }
+                })
+            }
         }).catch(error => {
-            /* error control */
+            dispatch(apiRequestError(error.response.status, error.message))
         })
 }
 
@@ -96,6 +108,14 @@ export const modifyData = (id, updatedData, allData) => dispatch => {
 }
 
 export const searchTypeSelectorChange = (value) => ({
-    type : type.SEARCH_TYPE_SELECTOR_CHANGE,
-    payload : value
+    type: type.SEARCH_TYPE_SELECTOR_CHANGE,
+    payload: value
+})
+
+export const apiRequestError = (errorCode, errorMessage) => ({
+    type: type.API_REQUEST_ERROR,
+    payload: {
+        code: errorCode,
+        message: errorMessage
+    }
 })

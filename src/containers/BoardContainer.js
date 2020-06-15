@@ -1,17 +1,21 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect} from "react";
 import {connect} from 'react-redux';
 import {changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents, searchTypeSelectorChange} from "../store/modules/board/action";
 import Board from "../components/Board";
 import ContentsModal from "../components/ContentsModal";
 import {deleteOne, post} from "../store/api/boardApi";
 import Topbar from "../components/Topbar";
-import TextField from '@material-ui/core/TextField';
-import {searchType} from "../static/constant";
+import {useHistory} from "react-router-dom";
 
 const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalData, accountId, role, isWriteModal, isSearch, keyword, boardId, searchType,
                             changePage, clickRow, closeModal, clickWriteButton, modifyData, keywordSearch, changeShowAllContents, searchTypeSelectorChange}) => {
 
+    const history = useHistory();
+
     useEffect(() => {
+        if(accountId == null){
+            history.push("/");
+        }
         changePage(pageNumber, pageSize);
     }, [])
 

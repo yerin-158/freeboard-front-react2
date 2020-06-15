@@ -13,6 +13,9 @@ const initialState = {
     keyword: "",
     boardId: 0,
     searchType: "",
+    isRequestFail: false,
+    errorCode: "",
+    errorMessage: "",
 };
 
 export default handleActions({
@@ -20,7 +23,8 @@ export default handleActions({
             ...state,
             pageNumber: action.payload.pageNumber,
             pageSize: action.payload.pageSize,
-            selectedData: action.payload.selectedData
+            selectedData: action.payload.selectedData,
+            isRequestFail: false,
         }),
         [type.CLICK_ROW]: (state, action) => ({
             ...state,
@@ -36,6 +40,7 @@ export default handleActions({
         [type.MODIFY_DATA]: (state, action) => ({
             ...state,
             selectedData: action.payload,
+            isRequestFail: false,
         }),
         [type.CLICK_WRITE_BUTTON]: (state, action) => ({
             ...state,
@@ -49,7 +54,8 @@ export default handleActions({
             boardId: (state.boardId === 0 ? 1 : 0),
             pageNumber: action.payload.pageNumber,
             pageSize: action.payload.pageSize,
-            selectedData: action.payload.selectedData
+            selectedData: action.payload.selectedData,
+            isRequestFail: false,
         }),
         [type.KEYWORD_SEARCH]: (state, action) => ({
             ...state,
@@ -58,11 +64,18 @@ export default handleActions({
             boardId: (state.boardId === 0 ? 1 : 0),
             pageNumber: action.payload.pageNumber,
             pageSize: action.payload.pageSize,
-            selectedData: action.payload.selectedData
+            selectedData: action.payload.selectedData,
+            isRequestFail: false,
         }),
         [type.SEARCH_TYPE_SELECTOR_CHANGE]: (state, action) => ({
             ...state,
             searchType: action.payload
+        }),
+        [type.API_REQUEST_ERROR]: (state, action) => ({
+            ...state,
+            isRequestFail: true,
+            errorCode: action.payload.code,
+            errorMessage: action.payload.message,
         })
     }, initialState
 )
