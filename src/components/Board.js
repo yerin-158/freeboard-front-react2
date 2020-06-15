@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react';
+import React, {forwardRef, useEffect} from 'react';
 import MaterialTable from 'material-table';
 import {Button, Grid, TextField} from "@material-ui/core";
 import {BOARD_PAGE_SIZE, searchType as searchTypes} from '../static/constant';
@@ -60,13 +60,20 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Board({keywordInStore, pageNumber, pageSize, columns, selectedData, accountId, searchType, handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, handleSearch, handleShowAllContentsButton, handleChangeSearchTypeSelect}) {
+export default function Board({keywordInStore, pageNumber, pageSize, columns, selectedData, accountId, searchType, isRequestFail, errorCode, errorMessage,
+                                  handleChangePageNumber, handleChangePageSize, handleRowClick, handleWriteButtonClick, handleSearch, handleShowAllContentsButton, handleChangeSearchTypeSelect}) {
     const classes = useStyles();
 
     let searchKeyword = "";
     const setSearchKeyword = (value) => {
         searchKeyword = value;
     };
+
+    useEffect(()=>{
+        if(isRequestFail === true){
+            alert(errorCode+" : "+errorMessage);
+        }
+    }, [isRequestFail, errorCode, errorMessage]);
 
     return (
         <MaterialTable
