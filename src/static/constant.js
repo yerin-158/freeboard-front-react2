@@ -1,4 +1,4 @@
-export const DOMAIN = "/freeboard01";
+export const DOMAIN = "/freeboard04";
 export const BOARD_PAGE_SIZE = 5;
 export const searchType = [
     {value: "ALL", print: "제목+내용"},
