@@ -9,13 +9,7 @@ function rand() {
 }
 
 function getModalStyle() {
-    const top = 50 + rand();
-    const left = 50 + rand();
-
     return {
-        /*top: `${top}%`,
-        left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,*/
         position: 'absolute',
         left: '50%',
         top: '50%',
@@ -38,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function ContentsModal({isModalOpen, modalData, userLoggedIn, userRoleLoggedIn, isWriteModal, handleClose, handleSave, handleDelete}) {
+export default function ContentsModal({isModalOpen, modalData, userLoggedIn, userRoleLoggedIn, isWriteModal, handleClose, handleSave, handleDelete, handleRowClick}) {
     const classes = useStyles();
     // getModalStyle is not a pure function, we roll the style only on the first render
     const [modalStyle] = React.useState(getModalStyle);
@@ -153,6 +147,8 @@ export default function ContentsModal({isModalOpen, modalData, userLoggedIn, use
                                 <Comments
                                     comments={modalData.comments.contents}
                                     userLoggedIn={userLoggedIn}
+                                    boardId={modalData.id}
+                                    handleAddComment={handleRowClick}
                                 />
                             </Grid>
                         </Grid>

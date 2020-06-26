@@ -92,6 +92,7 @@ const BoardContainer = ({pageNumber, pageSize, selectedData, isModalOpen, modalD
                 handleDelete={handleDelete}
                 handleSave={isWriteModal? handleWrite : handleModify}
                 isWriteModal={isWriteModal}
+                handleRowClick={clickRow}
             />
             : null}
         </div>
