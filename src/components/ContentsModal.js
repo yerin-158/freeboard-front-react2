@@ -1,7 +1,8 @@
 import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
-import {Button, Modal, TextField, Typography, Grid} from '@material-ui/core';
+import {Button, Grid, Modal, TextField, Typography} from '@material-ui/core';
 import {isAdminRole} from '../helper/specification';
+import Comments from "./Comments";
 
 function rand() {
     return Math.round(Math.random() * 20) - 10;
@@ -12,20 +13,27 @@ function getModalStyle() {
     const left = 50 + rand();
 
     return {
-        top: `${top}%`,
+        /*top: `${top}%`,
         left: `${left}%`,
-        transform: `translate(-${top}%, -${left}%)`,
+        transform: `translate(-${top}%, -${left}%)`,*/
+        position: 'absolute',
+        left: '50%',
+        top: '50%',
+        transform: 'translate(-50%, -50%)',
     };
 }
 
 const useStyles = makeStyles((theme) => ({
     paper: {
         position: 'absolute',
-        width: 400,
+        width: 800,
         backgroundColor: theme.palette.background.paper,
         border: '2px solid #000',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
+    },
+    root: {
+        flexGrow: 1,
     },
 }));
 
@@ -55,86 +63,100 @@ export default function ContentsModal({isModalOpen, modalData, userLoggedIn, use
                 aria-describedby="simple-modal-description"
             >
                 <div style={modalStyle} className={classes.paper}>
-                    <form className={classes.form} noValidate onSubmit={(event) => {
-                        event.preventDefault();
-                        handleSave(combineData());
-                    }}>
-                        {(isWriteModal || isModify) ?
-                            <div>
-                                <TextField
-                                    id="outlined-full-width"
-                                    label="제목"
-                                    placeholder="제목을 입력하세요."
-                                    fullWidth
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    variant="outlined"
-                                    defaultValue={modalData.title}
-                                    margin="normal"
-                                    onChange={event => setTitle(event.target.value)}
-                                    required
-                                />
-                                <TextField
-                                    id="outlined-multiline-static"
-                                    label="내용"
-                                    placeholder="내용을 입력하세요."
-                                    fullWidth
-                                    multiline
-                                    rows={4}
-                                    defaultValue={modalData.contents}
-                                    variant="outlined"
-                                    margin="normal"
-                                    onChange={event => setContents(event.target.value)}
-                                    required
-                                />
-                            </div>
-                            :
-                            <div>
-                                <h2 id="simple-modal-title">{modalData.title}</h2>
-                                <Typography variant="body1" gutterBottom>{modalData.contents}</Typography>
-                            </div>
-                        }
-                        <hr/>
-                        {isWriteModal ?
-                            <div>
-                                <ModalContentsWriter writer={userLoggedIn}/>
-                                <Grid container>
-                                    <Button type="submit" color="primary" className={classes.submit}>Save</Button>
-                                    <Button onClick={() => {
-                                        setIsModify(false);
-                                        handleClose();
-                                    }}>Close</Button>
-                                </Grid>
-                            </div>
-                            :
-                            <div>
-                                <ModalContentsWriter writer={modalData.writer}/>
-                                <Typography variant="body2" gutterBottom>작성일 : {modalData.createdAt}</Typography>
-                                <Grid container>
-                                    {isModify ?
-                                        <Grid>
-                                            <Button type="submit" color="primary"
-                                                    className={classes.submit}>Save</Button>
-                                            <Button onClick={() => setIsModify(false)}>Back</Button>
-                                        </Grid>
+                    <div className={classes.root}>
+                        <Grid container spacing={3}>
+                            <Grid item xs={6}>
+                                <form className={classes.form} noValidate onSubmit={(event) => {
+                                    event.preventDefault();
+                                    handleSave(combineData());
+                                }}>
+                                    {(isWriteModal || isModify) ?
+                                        <div>
+                                            <TextField
+                                                id="outlined-full-width"
+                                                label="제목"
+                                                placeholder="제목을 입력하세요."
+                                                fullWidth
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                variant="outlined"
+                                                defaultValue={modalData.title}
+                                                margin="normal"
+                                                onChange={event => setTitle(event.target.value)}
+                                                required
+                                            />
+                                            <TextField
+                                                id="outlined-multiline-static"
+                                                label="내용"
+                                                placeholder="내용을 입력하세요."
+                                                fullWidth
+                                                multiline
+                                                rows={4}
+                                                defaultValue={modalData.contents}
+                                                variant="outlined"
+                                                margin="normal"
+                                                onChange={event => setContents(event.target.value)}
+                                                required
+                                            />
+                                        </div>
                                         :
-                                        <ModalButtons
-                                            setIsModify={setIsModify}
-                                            handleDelete={handleDelete}
-                                            writer={modalData.writer}
-                                            userLoggedIn={userLoggedIn}
-                                            userRoleLoggedIn={userRoleLoggedIn}
-                                        />
+                                        <div>
+                                            <h2 id="simple-modal-title">{modalData.title}</h2>
+                                            <Typography variant="body1" gutterBottom>{modalData.contents}</Typography>
+                                        </div>
                                     }
-                                    <Button onClick={() => {
-                                        setIsModify(false);
-                                        handleClose();
-                                    }}>Close</Button>
-                                </Grid>
-                            </div>
-                        }
-                    </form>
+                                    <hr/>
+                                    {isWriteModal ?
+                                        <div>
+                                            <ModalContentsWriter writer={userLoggedIn}/>
+                                            <Grid container>
+                                                <Button type="submit" color="primary"
+                                                        className={classes.submit}>Save</Button>
+                                                <Button onClick={() => {
+                                                    setIsModify(false);
+                                                    handleClose();
+                                                }}>Close</Button>
+                                            </Grid>
+                                        </div>
+                                        :
+                                        <div>
+                                            <ModalContentsWriter writer={modalData.writer}/>
+                                            <Typography variant="body2" gutterBottom>작성일
+                                                : {modalData.createdAt}</Typography>
+                                            <Grid container>
+                                                {isModify ?
+                                                    <Grid>
+                                                        <Button type="submit" color="primary"
+                                                                className={classes.submit}>Save</Button>
+                                                        <Button onClick={() => setIsModify(false)}>Back</Button>
+                                                    </Grid>
+                                                    :
+                                                    <ModalButtons
+                                                        setIsModify={setIsModify}
+                                                        handleDelete={handleDelete}
+                                                        writer={modalData.writer}
+                                                        userLoggedIn={userLoggedIn}
+                                                        userRoleLoggedIn={userRoleLoggedIn}
+                                                    />
+                                                }
+                                                <Button onClick={() => {
+                                                    setIsModify(false);
+                                                    handleClose();
+                                                }}>Close</Button>
+                                            </Grid>
+                                        </div>
+                                    }
+                                </form>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <Comments
+                                    comments={modalData.comments.contents}
+                                    userLoggedIn={userLoggedIn}
+                                />
+                            </Grid>
+                        </Grid>
+                    </div>
                 </div>
             </Modal>
         </div>
@@ -146,8 +168,10 @@ function ModalButtons({writer, userLoggedIn, setIsModify, handleDelete, userRole
     return (
         <span>
             <Grid>
-            {writer.accountId == userLoggedIn ? <Button color="primary" onClick={() => setIsModify(true)}>Modify</Button> : null}
-            {isAdminRole(userRoleLoggedIn) || writer.accountId == userLoggedIn ? <Button color="secondary" onClick={() => handleDelete()}>Delete</Button> : null}
+            {writer.accountId == userLoggedIn ?
+                <Button color="primary" onClick={() => setIsModify(true)}>Modify</Button> : null}
+                {isAdminRole(userRoleLoggedIn) || writer.accountId == userLoggedIn ?
+                    <Button color="secondary" onClick={() => handleDelete()}>Delete</Button> : null}
             </Grid>
         </span>
     );
