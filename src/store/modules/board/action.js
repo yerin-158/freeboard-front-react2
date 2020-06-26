@@ -1,5 +1,6 @@
 import type from './type'
 import {get, update, getForSearch} from "../../api/boardApi";
+import {getComments} from "../../api/commentApi";
 import {getData} from "../../../helper/boardHelper";
 
 export const changePage = (pageNumber, pageSize, searchType, keyword, isSearch) => dispatch => {
@@ -72,10 +73,21 @@ export const changeShowAllContents = (pageSize) => dispatch => {
         })
 }
 
-export const clickRow = (rowData) => ({
-    type: type.CLICK_ROW,
-    payload: rowData
-})
+export const clickRow = (rowData) => dispatch => {
+    return getComments(rowData.id)
+        .then(response => {
+            if (typeof response.data.code != "undefined") {
+                dispatch(apiRequestError("", response.data.message))
+            } else {
+                rowData.comments = response.data;
+                dispatch({
+                    type: type.CLICK_ROW,
+                    payload: rowData
+                });
+            }
+        }
+    )
+}
 
 export const closeModal = () => ({
     type: type.CLOSE_MODAL,
