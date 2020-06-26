@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
+import React from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import {Button, TextField} from "@material-ui/core";
+import {TextField} from "@material-ui/core";
 import EditIcon from '@material-ui/icons/Edit';
+import {addComment} from "../store/api/commentApi";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,16 +16,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function Comments({comments, userLoggedIn}) {
+export default function Comments({comments, userLoggedIn, boardId, handleAddComment}) {
     const classes = useStyles();
 
     var newComment = "";
     const setNewComment = (value) => {
         newComment = value;
     }
-
-
-
 
     return (
         <div className={classes.root}>
@@ -38,24 +35,35 @@ export default function Comments({comments, userLoggedIn}) {
                 </Grid>
                 <Grid item xs>
                     <EditIcon color="primary" size="medium"
-                            onClick={() => alert(newComment)} />
+                              onClick={() => {
+                                  addComment(newComment, boardId)
+                                      .then(response => {
+                                          if (typeof response.data.code != "undefined") {
+                                              alert(response.data.message);
+                                          } else {
+                                              const queryParam = response.config.url.split('?');
+                                              handleAddComment({id: queryParam[1].replace(/[^0-9]/g, '')});
+                                          }
+                                      });
+                              }}/>
                 </Grid>
             </Grid>
             {comments.map((comment, index) => {
-                return (
-                    <Grid container spacing={1}>
-                        <Grid item xs>
-                            {comment.writer.accountId}
+                    return (
+                        <Grid container spacing={1}>
+                            <Grid item xs>
+                                {comment.writer.accountId}
+                            </Grid>
+                            <Grid item xs={6}>
+                                {comment.contents}
+                            </Grid>
+                            <Grid item xs>
+                                {comment.createdAt.monthValue + '/' + comment.createdAt.dayOfMonth + ' (' + comment.createdAt.hour + ':' + comment.createdAt.minute + ')'}
+                                {comment.writer.accountId === userLoggedIn ? ' X' : null}
+                            </Grid>
                         </Grid>
-                        <Grid item xs={6}>
-                            {comment.contents}
-                        </Grid>
-                        <Grid item xs>
-                            {comment.createdAt.monthValue + '/' + comment.createdAt.dayOfMonth + ' (' + comment.createdAt.hour + ':' + comment.createdAt.minute + ')'}
-                            {comment.writer.accountId === userLoggedIn ? ' X' : null }
-                        </Grid>
-                    </Grid>
-                )}
+                    )
+                }
             )}
         </div>
     );
